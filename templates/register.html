@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register – VitaDetect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body>
+
+<nav class="vita-nav">
+  <div class="container d-flex align-items-center justify-content-between">
+    <a href="{{ url_for('home') }}" class="brand">
+      <i class="bi bi-capsule"></i> VitaDetect
+    </a>
+    <div class="d-flex align-items-center gap-2">
+      <span class="text-muted" style="font-size:.9rem;">Already have an account?</span>
+      <a href="{{ url_for('login') }}" class="btn-nav nav-link">Login</a>
+    </div>
+  </div>
+</nav>
+
+<div class="auth-page">
+  <div class="auth-box">
+    <div class="auth-logo">
+      <i class="bi bi-person-plus-fill"></i>
+    </div>
+    <h2>Create Account</h2>
+    <p class="subtitle">Join VitaDetect to start detecting vitamin deficiencies</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+      <div class="alert alert-{{ category }}">
+        <i class="bi bi-{% if category == 'danger' %}exclamation-triangle{% elif category == 'success' %}check-circle{% else %}info-circle{% endif %}-fill"></i>
+        {{ message }}
+      </div>
+      {% endfor %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('register') }}" novalidate>
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <div class="input-icon-wrapper">
+          <i class="bi bi-person"></i>
+          <input type="text" name="name" class="form-control" placeholder="Enter your full name"
+                 value="{{ name|default('') }}" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <div class="input-icon-wrapper">
+          <i class="bi bi-envelope"></i>
+          <input type="email" name="email" class="form-control" placeholder="Enter your email"
+                 value="{{ email|default('') }}" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <div class="input-icon-wrapper">
+          <i class="bi bi-lock"></i>
+          <input type="password" name="password" id="password" class="form-control"
+                 placeholder="At least 6 characters" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Confirm Password</label>
+        <div class="input-icon-wrapper">
+          <i class="bi bi-lock-fill"></i>
+          <input type="password" name="confirm_password" id="confirm_password" class="form-control"
+                 placeholder="Re-enter your password" required>
+        </div>
+        <small id="pwd-match-msg" style="font-size:0.82rem;margin-top:0.3rem;display:block;"></small>
+      </div>
+
+      <button type="submit" class="btn-submit">
+        <i class="bi bi-person-check"></i> Create Account
+      </button>
+    </form>
+
+    <div class="text-center mt-3" style="font-size:0.9rem;color:var(--text-muted);">
+      Already have an account? <a href="{{ url_for('login') }}" style="color:var(--primary);font-weight:600;">Log in</a>
+    </div>
+
+    <div class="text-center mt-4" style="font-size:0.78rem;color:var(--text-muted);">
+      <i class="bi bi-shield-check"></i> Your data is stored securely and never shared.
+    </div>
+  </div>
+</div>
+
+<script>
+const pwd = document.getElementById('password');
+const confirm = document.getElementById('confirm_password');
+const msg = document.getElementById('pwd-match-msg');
+
+confirm.addEventListener('input', () => {
+  if (!confirm.value) { msg.textContent = ''; return; }
+  if (pwd.value === confirm.value) {
+    msg.textContent = '✓ Passwords match';
+    msg.style.color = '#15803d';
+  } else {
+    msg.textContent = '✗ Passwords do not match';
+    msg.style.color = '#b91c1c';
+  }
+});
+</script>
+
+<script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

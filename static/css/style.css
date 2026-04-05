@@ -1,0 +1,491 @@
+/* ============================================================
+   VitaDetect - Custom Styles
+   Clean medical/health theme, no restaurant elements
+   ============================================================ */
+
+:root {
+  --primary: #2563eb;
+  --primary-dark: #1d4ed8;
+  --primary-light: #dbeafe;
+  --secondary: #7c3aed;
+  --accent: #10b981;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --dark: #0f172a;
+  --body-bg: #f8fafc;
+  --card-bg: #ffffff;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+  --radius: 12px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow: 0 4px 16px rgba(0,0,0,.08);
+  --shadow-lg: 0 10px 40px rgba(0,0,0,.12);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  background: var(--body-bg);
+  color: var(--dark);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ── Navbar ── */
+.vita-nav {
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0.85rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: var(--shadow-sm);
+}
+
+.vita-nav .brand {
+  font-weight: 800;
+  font-size: 1.4rem;
+  color: var(--primary);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.vita-nav .brand i { font-size: 1.6rem; }
+
+.vita-nav .nav-link {
+  color: #334155;
+  font-weight: 500;
+  padding: 0.4rem 0.9rem;
+  border-radius: 8px;
+  transition: background .2s, color .2s;
+  text-decoration: none;
+}
+
+.vita-nav .nav-link:hover,
+.vita-nav .nav-link.active {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.vita-nav .btn-nav {
+  background: var(--primary);
+  color: #fff !important;
+  border-radius: 8px;
+  padding: 0.45rem 1.1rem;
+  font-weight: 600;
+  transition: background .2s, transform .1s;
+}
+.vita-nav .btn-nav:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+}
+
+/* ── Hero ── */
+.hero-section {
+  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 50%, #7c3aed 100%);
+  min-height: 88vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+.hero-section .hero-content { position: relative; z-index: 1; }
+.hero-section h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 900; color: #fff; line-height: 1.15; }
+.hero-section p { color: rgba(255,255,255,0.85); font-size: 1.15rem; }
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: #fff;
+  border-radius: 100px;
+  padding: 0.35rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  backdrop-filter: blur(8px);
+}
+
+/* ── Buttons ── */
+.btn-vita {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 0.75rem 1.8rem;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all .2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+.btn-vita:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(37,99,235,.35); color: #fff; }
+
+.btn-vita-outline {
+  background: transparent;
+  color: #fff;
+  border: 2px solid rgba(255,255,255,0.5);
+  border-radius: 10px;
+  padding: 0.75rem 1.8rem;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all .2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+.btn-vita-outline:hover { background: rgba(255,255,255,0.1); border-color: #fff; color: #fff; }
+
+.btn-accent {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 0.75rem 1.8rem;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all .2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+.btn-accent:hover { background: #059669; transform: translateY(-2px); color: #fff; }
+
+/* ── Cards ── */
+.vita-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  transition: transform .2s, box-shadow .2s;
+}
+.vita-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+
+.vita-card-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.vita-card-body { padding: 1.5rem; }
+
+/* ── Auth Pages ── */
+.auth-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #eff6ff 0%, #f5f3ff 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+.auth-box {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(37,99,235,.12);
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 440px;
+  border: 1px solid var(--border);
+}
+
+.auth-logo {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+.auth-logo i {
+  font-size: 3rem;
+  color: var(--primary);
+  background: var(--primary-light);
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.auth-box h2 { font-weight: 800; font-size: 1.7rem; text-align: center; margin-bottom: 0.25rem; }
+.auth-box .subtitle { text-align: center; color: var(--text-muted); margin-bottom: 2rem; }
+
+/* ── Form Controls ── */
+.form-group { margin-bottom: 1.25rem; }
+.form-label { font-weight: 600; font-size: 0.9rem; margin-bottom: 0.4rem; display: block; color: #334155; }
+.form-control {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  border: 1.5px solid var(--border);
+  border-radius: 9px;
+  font-size: 0.95rem;
+  transition: border-color .2s, box-shadow .2s;
+  background: #fff;
+  color: var(--dark);
+}
+.form-control:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37,99,235,.12);
+}
+.input-icon-wrapper {
+  position: relative;
+}
+.input-icon-wrapper .form-control { padding-left: 2.75rem; }
+.input-icon-wrapper i {
+  position: absolute;
+  left: 0.9rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  font-size: 1rem;
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 0.85rem;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .2s;
+  margin-top: 0.5rem;
+}
+.btn-submit:hover { background: var(--primary-dark); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(37,99,235,.3); }
+
+/* ── Alerts ── */
+.alert {
+  border-radius: 10px;
+  padding: 0.85rem 1.1rem;
+  margin-bottom: 1rem;
+  border: none;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+.alert-danger { background: #fef2f2; color: #b91c1c; }
+.alert-success { background: #f0fdf4; color: #15803d; }
+.alert-info { background: #eff6ff; color: #1d4ed8; }
+.alert-warning { background: #fffbeb; color: #b45309; }
+
+/* ── Upload Section ── */
+.upload-zone {
+  border: 2.5px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 3rem 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all .25s;
+  background: #f8fafc;
+  position: relative;
+}
+.upload-zone:hover, .upload-zone.drag-over {
+  border-color: var(--primary);
+  background: var(--primary-light);
+}
+.upload-zone input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.upload-zone .upload-icon {
+  font-size: 3rem;
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+.upload-zone h4 { font-weight: 700; margin-bottom: 0.25rem; }
+.upload-zone p { color: var(--text-muted); font-size: 0.9rem; }
+
+.image-preview-box {
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1.5px solid var(--border);
+  background: #000;
+  max-height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.image-preview-box img { max-height: 280px; width: 100%; object-fit: contain; }
+
+/* ── Result Card ── */
+.result-card {
+  border-radius: var(--radius);
+  padding: 1.75rem;
+  border: 2px solid;
+  animation: slideIn .4s ease;
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.result-vitamin-name {
+  font-size: 1.6rem;
+  font-weight: 900;
+  margin-bottom: 0.5rem;
+}
+.result-desc { font-size: 0.95rem; color: #334155; margin-bottom: 1.25rem; }
+
+.tag-list { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
+.tag {
+  background: rgba(0,0,0,.06);
+  border-radius: 100px;
+  padding: 0.3rem 0.85rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+/* ── Stats / Feature Cards ── */
+.feature-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+}
+
+.stat-number { font-size: 2.5rem; font-weight: 900; }
+
+/* ── Section Titles ── */
+.section-title { text-align: center; margin-bottom: 3rem; }
+.section-title .badge-label {
+  display: inline-block;
+  background: var(--primary-light);
+  color: var(--primary);
+  border-radius: 100px;
+  padding: 0.35rem 1rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  margin-bottom: 0.75rem;
+}
+.section-title h2 { font-size: 2rem; font-weight: 900; margin-bottom: 0.5rem; }
+.section-title p { color: var(--text-muted); max-width: 520px; margin: 0 auto; }
+
+/* ── Dashboard specific ── */
+.dash-header {
+  background: linear-gradient(135deg, #1e3a8a, #2563eb);
+  color: #fff;
+  padding: 2.5rem 0 3rem;
+}
+.dash-header h1 { font-weight: 800; font-size: 1.8rem; }
+.dash-header p { opacity: 0.85; }
+
+.dashboard-card {
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+  height: 100%;
+}
+.dashboard-card h5 { font-weight: 700; margin-bottom: 0; }
+
+/* ── Loader ── */
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--primary-light);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+  margin: 0 auto;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Footer ── */
+.vita-footer {
+  background: var(--dark);
+  color: rgba(255,255,255,0.65);
+  padding: 2.5rem 0;
+  text-align: center;
+  margin-top: 4rem;
+}
+.vita-footer a { color: rgba(255,255,255,0.75); text-decoration: none; }
+.vita-footer a:hover { color: #fff; }
+
+/* ── Misc Utilities ── */
+.text-primary-custom { color: var(--primary); }
+.bg-primary-light { background: var(--primary-light); }
+.fw-800 { font-weight: 800; }
+.fw-900 { font-weight: 900; }
+
+.step-number {
+  width: 48px;
+  height: 48px;
+  background: var(--primary);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+/* Vitamin type pills */
+.vit-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-radius: 100px;
+  padding: 0.4rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border: 2px solid;
+}
+
+/* ── Progress bar ── */
+.progress-vita {
+  height: 8px;
+  border-radius: 100px;
+  background: var(--border);
+  overflow: hidden;
+}
+.progress-vita-bar {
+  height: 100%;
+  border-radius: 100px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  transition: width 1s ease;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .hero-section { min-height: 70vh; }
+  .auth-box { padding: 1.75rem; }
+  .upload-zone { padding: 2rem 1rem; }
+}

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard – VitaDetect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body>
+
+<!-- ── Navbar ── -->
+<nav class="vita-nav">
+  <div class="container d-flex align-items-center justify-content-between">
+    <a href="{{ url_for('home') }}" class="brand">
+      <i class="bi bi-capsule"></i> VitaDetect
+    </a>
+    <div class="d-flex align-items-center gap-3">
+      <a href="{{ url_for('dashboard') }}" class="nav-link active">
+        <i class="bi bi-house"></i> Dashboard
+      </a>
+      <a href="{{ url_for('analysis') }}" class="nav-link">
+        <i class="bi bi-bar-chart"></i> Analysis
+      </a>
+      <div class="d-flex align-items-center gap-2 ps-3" style="border-left:1px solid var(--border);">
+        <div style="width:34px;height:34px;background:var(--primary-light);border-radius:50%;display:flex;align-items:center;justify-content:center;">
+          <i class="bi bi-person-fill" style="color:var(--primary);font-size:1rem;"></i>
+        </div>
+        <span style="font-weight:600;font-size:0.9rem;">{{ session.user_name }}</span>
+        <a href="{{ url_for('logout') }}" class="nav-link" style="color:var(--danger);">
+          <i class="bi bi-box-arrow-right"></i> Logout
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Dashboard Header ── -->
+<div class="dash-header">
+  <div class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+      <div class="alert alert-{{ category }} mb-3">
+        <i class="bi bi-check-circle-fill"></i> {{ message }}
+      </div>
+      {% endfor %}
+    {% endwith %}
+    <h1><i class="bi bi-activity me-2"></i>Vitamin Deficiency Detector</h1>
+    <p class="mb-0">Upload a skin or tissue image and it will classify the vitamin deficiency.</p>
+  </div>
+</div>
+
+<div class="container mt-n3 pb-5" style="margin-top:-1rem !important;">
+
+  <div class="row g-4">
+    <!-- ── Upload Panel ── -->
+    <div class="col-lg-6">
+      <div class="dashboard-card">
+        <h5 class="mb-1"><i class="bi bi-cloud-arrow-up me-2" style="color:var(--primary);"></i>Upload Image</h5>
+        <p class="text-muted mb-3" style="font-size:0.88rem;">Supported: JPG, PNG · Max 16MB</p>
+
+        <div class="upload-zone" id="uploadZone">
+          <input type="file" id="imageInput" accept=".jpg,.jpeg,.png" onchange="handleFile(this)">
+          <div id="uploadPlaceholder">
+            <div class="upload-icon"><i class="bi bi-image"></i></div>
+            <h4>Drop an image here</h4>
+            <p>or click to browse your files</p>
+          </div>
+          <div id="uploadedName" class="d-none" style="font-size:0.9rem;color:var(--primary);font-weight:600;"></div>
+        </div>
+
+        <div id="previewContainer" class="mt-3 d-none">
+          <div class="image-preview-box">
+            <img id="previewImg" src="" alt="Preview">
+          </div>
+        </div>
+
+        <button class="btn-vita w-100 mt-3 justify-content-center" id="predictBtn" onclick="predict()" disabled>
+          <i class="bi bi-cpu"></i> Analyse Image
+        </button>
+      </div>
+    </div>
+
+    <!-- ── Result Panel ── -->
+    <div class="col-lg-6">
+      <div class="dashboard-card">
+        <h5 class="mb-3"><i class="bi bi-clipboard-pulse me-2" style="color:var(--primary);"></i>Detection Result</h5>
+
+        <!-- Idle state -->
+        <div id="resultIdle" class="text-center py-4">
+          <i class="bi bi-search" style="font-size:3rem;color:var(--border);"></i>
+          <p class="text-muted mt-2 mb-0">Upload an image and click <strong>Analyse</strong> to see the result.</p>
+        </div>
+
+        <!-- Loading state -->
+        <div id="resultLoading" class="text-center py-4 d-none">
+          <div class="spinner mb-3"></div>
+          <p class="text-muted">Analysing image..</p>
+        </div>
+
+        <!-- Error state -->
+        <div id="resultError" class="d-none">
+          <div class="alert alert-danger">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            <span id="errorMsg">Something went wrong.</span>
+          </div>
+        </div>
+
+        <!-- Success state -->
+        <div id="resultSuccess" class="d-none">
+          <div class="result-card" id="resultCard">
+            <div class="d-flex align-items-center gap-3 mb-3">
+              <div id="resultIconBox" style="width:52px;height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <i id="resultIcon" class="bi" style="font-size:1.4rem;color:#fff;"></i>
+              </div>
+              <div>
+                <div style="font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;opacity:.7;">Detected Deficiency</div>
+                <div class="result-vitamin-name" id="resultName"></div>
+              </div>
+            </div>
+            <p class="result-desc" id="resultDesc"></p>
+
+            <div class="row g-3">
+              <div class="col-12">
+                <div style="font-weight:700;font-size:0.88rem;margin-bottom:0.5rem;text-transform:uppercase;letter-spacing:.05em;opacity:.7;">
+                  <i class="bi bi-clipboard-minus me-1"></i> Common Symptoms
+                </div>
+                <div class="tag-list" id="resultSymptoms"></div>
+              </div>
+              <div class="col-12">
+                <div style="font-weight:700;font-size:0.88rem;margin-bottom:0.5rem;text-transform:uppercase;letter-spacing:.05em;opacity:.7;">
+                  <i class="bi bi-egg-fried me-1"></i> Recommended Foods
+                </div>
+                <div class="tag-list" id="resultFoods"></div>
+              </div>
+            </div>
+
+            <div class="mt-3 p-2 rounded" style="background:rgba(0,0,0,.05);font-size:0.78rem;">
+              <i class="bi bi-info-circle me-1"></i> Always consult a qualified healthcare professional.
+            </div>
+          </div>
+
+          <button class="btn-accent mt-3 w-100 justify-content-center" onclick="resetAnalysis()">
+            <i class="bi bi-arrow-counterclockwise"></i> Analyse Another Image
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Quick Info Cards ── -->
+  <div class="row g-3 mt-2">
+    {% for v, color, icon, short in [
+      ('A','#f59e0b','bi-eye','Night vision & Immunity'),
+      ('B','#8b5cf6','bi-activity','Red blood cells & Nerves'),
+      ('C','#10b981','bi-shield-check','Collagen & Antioxidant'),
+      ('D','#f97316','bi-sun','Bone & Calcium absorption'),
+      ('E','#ec4899','bi-heart-pulse','Antioxidant & Muscle health')
+    ] %}
+    <div class="col-6 col-md-4 col-lg">
+      <div class="dashboard-card text-center py-3 px-2">
+        <div style="width:40px;height:40px;background:{{ color }}20;border-radius:10px;display:flex;align-items:center;justify-content:center;margin:0 auto 0.6rem;">
+          <i class="bi {{ icon }}" style="color:{{ color }};font-size:1.1rem;"></i>
+        </div>
+        <div style="font-weight:800;font-size:0.95rem;">Vitamin {{ v }}</div>
+        <div style="font-size:0.78rem;color:var(--text-muted);">{{ short }}</div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<footer class="vita-footer">
+  <div class="container">
+    <p class="mb-1" style="font-size:0.85rem;"><i class="bi bi-capsule me-1"></i> VitaDetect – Vitamin Deficiency Detection</p>
+    <p style="font-size:0.78rem;"></p>
+  </div>
+</footer>
+
+<script>
+let selectedFile = null;
+
+function handleFile(input) {
+  const file = input.files[0];
+  if (!file) return;
+
+  selectedFile = file;
+
+  // Show preview
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('previewImg').src = e.target.result;
+    document.getElementById('previewContainer').classList.remove('d-none');
+    document.getElementById('uploadPlaceholder').classList.add('d-none');
+    document.getElementById('uploadedName').textContent = '📎 ' + file.name;
+    document.getElementById('uploadedName').classList.remove('d-none');
+  };
+  reader.readAsDataURL(file);
+
+  // Enable button
+  document.getElementById('predictBtn').disabled = false;
+  resetResult();
+}
+
+function resetResult() {
+  document.getElementById('resultIdle').classList.remove('d-none');
+  document.getElementById('resultLoading').classList.add('d-none');
+  document.getElementById('resultError').classList.add('d-none');
+  document.getElementById('resultSuccess').classList.add('d-none');
+}
+
+function resetAnalysis() {
+  selectedFile = null;
+  document.getElementById('imageInput').value = '';
+  document.getElementById('previewContainer').classList.add('d-none');
+  document.getElementById('uploadPlaceholder').classList.remove('d-none');
+  document.getElementById('uploadedName').classList.add('d-none');
+  document.getElementById('predictBtn').disabled = true;
+  resetResult();
+}
+
+async function predict() {
+  if (!selectedFile) return;
+
+  // Show loading
+  document.getElementById('resultIdle').classList.add('d-none');
+  document.getElementById('resultLoading').classList.remove('d-none');
+  document.getElementById('resultError').classList.add('d-none');
+  document.getElementById('resultSuccess').classList.add('d-none');
+  document.getElementById('predictBtn').disabled = true;
+
+  const formData = new FormData();
+  formData.append('file', selectedFile);
+
+  try {
+    const resp = await fetch('/predict', { method: 'POST', body: formData });
+
+    let data;
+    try {
+      data = await resp.json();
+    } catch {
+      document.getElementById('resultLoading').classList.add('d-none');
+      document.getElementById('errorMsg').textContent = 'Server error. Please refresh the page and try again.';
+      document.getElementById('resultError').classList.remove('d-none');
+      document.getElementById('predictBtn').disabled = false;
+      return;
+    }
+
+    document.getElementById('resultLoading').classList.add('d-none');
+
+    if (resp.status === 401) {
+      document.getElementById('errorMsg').textContent = 'Session expired. Please log in again.';
+      document.getElementById('resultError').classList.remove('d-none');
+      setTimeout(() => { window.location.href = '/login'; }, 2000);
+      return;
+    }
+
+    if (!resp.ok || data.error) {
+      document.getElementById('errorMsg').textContent = data.error || 'Prediction failed. Please try another image.';
+      document.getElementById('resultError').classList.remove('d-none');
+      document.getElementById('predictBtn').disabled = false;
+      return;
+    }
+
+    // Populate result
+    const card = document.getElementById('resultCard');
+    card.style.borderColor = data.color;
+    card.style.background = data.color + '0d';
+
+    document.getElementById('resultIconBox').style.background = data.color;
+    document.getElementById('resultIcon').className = 'bi ' + data.icon;
+    document.getElementById('resultName').textContent = data.vitamin;
+    document.getElementById('resultName').style.color = data.color;
+    document.getElementById('resultDesc').textContent = data.description;
+
+    const sympEl = document.getElementById('resultSymptoms');
+    sympEl.innerHTML = data.symptoms.map(s =>
+      `<span class="tag"><i class="bi bi-dot"></i>${s}</span>`
+    ).join('');
+
+    const foodEl = document.getElementById('resultFoods');
+    foodEl.innerHTML = data.foods.map(f =>
+      `<span class="tag"><i class="bi bi-check"></i>${f}</span>`
+    ).join('');
+
+    document.getElementById('resultSuccess').classList.remove('d-none');
+
+  } catch (err) {
+    document.getElementById('resultLoading').classList.add('d-none');
+    document.getElementById('errorMsg').textContent = 'Cannot reach server. Make sure the Flask app is running and try again.';
+    document.getElementById('resultError').classList.remove('d-none');
+    document.getElementById('predictBtn').disabled = false;
+  }
+}
+
+// Drag and drop
+const zone = document.getElementById('uploadZone');
+zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+zone.addEventListener('drop', e => {
+  e.preventDefault();
+  zone.classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file) {
+    document.getElementById('imageInput').files = e.dataTransfer.files;
+    handleFile(document.getElementById('imageInput'));
+  }
+});
+</script>
+
+<script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VitaDetect – Vitamin Deficiency Detection</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body>
+
+<!-- ── Navbar ── -->
+<nav class="vita-nav">
+  <div class="container d-flex align-items-center justify-content-between">
+    <a href="{{ url_for('home') }}" class="brand">
+      <i class="bi bi-capsule"></i> VitaDetect
+    </a>
+    <div class="d-flex align-items-center gap-2">
+      <a href="{{ url_for('login') }}" class="nav-link">Login</a>
+      <a href="{{ url_for('register') }}" class="btn-nav nav-link">Get Started</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<section class="hero-section">
+  <div class="container hero-content">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6">
+       
+        <h1>Vitamin Deficiency Detection</h1>
+        <p class="my-4">Our deep learning system analyzes tissue images to accurately classify Vitamin A, B, C, D, and E deficiencies with up to 98% accuracy.</p>
+        <div class="d-flex flex-wrap gap-3">
+          <a href="{{ url_for('register') }}" class="btn-vita">
+            <i class="bi bi-person-plus"></i> Create Free Account
+          </a>
+          <a href="#how-it-works" class="btn-vita-outline">
+            <i class="bi bi-play-circle"></i> See How It Works
+          </a>
+        </div>
+        <div class="d-flex flex-wrap gap-4 mt-4" style="color:rgba(255,255,255,0.8);">
+          <div class="d-flex align-items-center gap-2"><i class="bi bi-check-circle-fill" style="color:#10b981"></i> 98% Accuracy</div>
+          <div class="d-flex align-items-center gap-2"><i class="bi bi-check-circle-fill" style="color:#10b981"></i> 5 Vitamin Types</div>
+          <div class="d-flex align-items-center gap-2"><i class="bi bi-check-circle-fill" style="color:#10b981"></i> Instant Results</div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="row g-3">
+          {% set vitamins = [
+            ('A','#f59e0b','bi-eye','Night Blindness, Skin Issues'),
+            ('B','#8b5cf6','bi-activity','Anaemia, Nerve Damage'),
+            ('C','#10b981','bi-shield-check','Scurvy, Bleeding Gums'),
+            ('D','#f97316','bi-sun','Bone Loss, Rickets'),
+            ('E','#ec4899','bi-heart-pulse','Muscle Weakness, Vision')
+          ] %}
+          {% for v, color, icon, symp in vitamins %}
+          <div class="col-6 {% if loop.last %}offset-3{% endif %}">
+            <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:14px;padding:1.1rem;backdrop-filter:blur(8px);">
+              <div style="width:42px;height:42px;background:{{ color }};border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:0.7rem;">
+                <i class="bi {{ icon }}" style="color:#fff;font-size:1.2rem;"></i>
+              </div>
+              <div style="color:#fff;font-weight:800;font-size:1.05rem;">Vitamin {{ v }}</div>
+              <div style="color:rgba(255,255,255,0.7);font-size:0.8rem;margin-top:0.2rem;">{{ symp }}</div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Stats ── -->
+<section class="py-5 bg-white border-bottom">
+  <div class="container">
+    <div class="row g-4 text-center">
+      {% for stat, label in [('98%','Model Accuracy'),('5','Vitamin Types Detected'),('6,000+','Clinical Images Trained'),('< 2s','Detection Speed')] %}
+      <div class="col-6 col-md-3">
+        <div class="stat-number text-primary-custom">{{ stat }}</div>
+        <div class="text-muted fw-500">{{ label }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ── How It Works ── -->
+<section id="how-it-works" class="py-5 mt-2">
+  <div class="container">
+    <div class="section-title">
+      <div class="badge-label">Simple Process</div>
+      <h2>How VitaDetect Works</h2>
+      <p>Get results in three simple steps using our deep learning model trained on thousands of clinical images.</p>
+    </div>
+    <div class="row g-4">
+      {% for num, icon, title, desc in [
+        ('1','bi-person-plus-fill','Create an Account','Register for free and securely access the platform from any device.'),
+        ('2','bi-cloud-arrow-up','Upload a Skin Image','Upload a JPG or PNG image of the affected area for analysis.'),
+        ('3','bi-cpu','Get Instant Results','Our model classifies the vitamin deficiency and shows dietary recommendations.')
+      ] %}
+      <div class="col-md-4">
+        <div class="vita-card p-4 text-center h-100">
+          <div class="d-flex align-items-center gap-3 justify-content-center mb-3">
+            <div class="step-number">{{ num }}</div>
+          </div>
+          <div class="feature-icon mx-auto" style="background:var(--primary-light);">
+            <i class="bi {{ icon }}" style="color:var(--primary);"></i>
+          </div>
+          <h5 class="fw-800">{{ title }}</h5>
+          <p class="text-muted mb-0">{{ desc }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ── Vitamins Info ── -->
+<section class="py-5 bg-white">
+  <div class="container">
+    <div class="section-title">
+      <div class="badge-label">Detectable Deficiencies</div>
+      <h2>What We Can Detect</h2>
+      <p>Our system classifies five essential vitamin deficiencies that are detectable from skin and tissue images.</p>
+    </div>
+    <div class="row g-4">
+      {% for v, color, icon, desc in [
+        ('A','#f59e0b','bi-eye','Critical for vision and immune function. Deficiency is the leading preventable cause of childhood blindness worldwide.'),
+        ('B','#8b5cf6','bi-activity','B12 deficiency affects red blood cell production and nervous system health, causing fatigue and neurological symptoms.'),
+        ('C','#10b981','bi-shield-check','Essential for collagen synthesis and immune defense. Severe deficiency leads to scurvy and impaired wound healing.'),
+        ('D','#f97316','bi-sun','Key for calcium absorption and bone strength. Deficiency causes rickets in children and osteoporosis in adults.'),
+        ('E','#ec4899','bi-heart-pulse','A powerful antioxidant. Deficiency damages nerves and muscles, weakening immune response and coordination.')
+      ] %}
+      <div class="col-md-6 col-lg-4">
+        <div class="vita-card p-4 h-100">
+          <div class="d-flex align-items-center gap-3 mb-3">
+            <div style="width:52px;height:52px;background:{{ color }}20;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <i class="bi {{ icon }}" style="color:{{ color }};font-size:1.4rem;"></i>
+            </div>
+            <h5 class="fw-800 mb-0">Vitamin {{ v }}</h5>
+          </div>
+          <p class="text-muted mb-0" style="font-size:0.92rem;">{{ desc }}</p>
+        </div>
+      </div>
+      {% endfor %}
+      <!-- CTA card -->
+      <div class="col-md-6 col-lg-4">
+        <div class="vita-card p-4 h-100 d-flex flex-column align-items-center justify-content-center text-center" style="background:linear-gradient(135deg,#2563eb,#7c3aed);border:none;">
+          <i class="bi bi-capsule" style="color:#fff;font-size:2.5rem;margin-bottom:1rem;"></i>
+          <h5 class="fw-800" style="color:#fff;">Ready to Try?</h5>
+          <p style="color:rgba(255,255,255,0.8);font-size:0.9rem;">Create your free account and start analyzing images instantly.</p>
+          <a href="{{ url_for('register') }}" class="btn-vita mt-2" style="background:#fff;color:var(--primary);">Get Started Free</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer class="vita-footer">
+  <div class="container">
+    <div class="d-flex align-items-center justify-content-center gap-2 mb-2">
+      <i class="bi bi-capsule" style="color:var(--primary);font-size:1.3rem;"></i>
+      <span style="color:#fff;font-weight:800;font-size:1.1rem;">VitaDetect</span>
+    </div>
+    <p class="mb-1" style="font-size:0.85rem;">Vitamin Deficiency Detection </p>
+    
+  </div>
+</footer>
+
+<script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>
